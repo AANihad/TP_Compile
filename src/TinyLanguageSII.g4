@@ -37,15 +37,15 @@ INFERIEUR OU EGAL
 
 //Expressions régulières
 NOM_PROGRAMME : [A-Z]([a-zA-Z0-9]|'_')*;
-ID : [a-zA-Z0-9_]+;
-INTEGER : '-'?[1-9][0-9]*|'0' ;
-FLOAT :  '-'?[1-9][0-9]+','[0-9]*;
+ID : [a-zA-Z][a-zA-Z0-9]*;
+INTEGER : [0-9]+ ;
+FLOAT :  [0-9]+','[0-9]+;
 STRING : '"'(~["])*'"'; // Tout caractère excepté " entre deux "
 
 // Commentaires
 UNELIGNE : '//'~[\n]* -> skip;
 MULTILIGNE : '/*' (.)*? '*/' -> skip; // le ? est pour avoir une expression non avide
-WS : [ \n\t]* -> skip;
+WS : [ \n\t] -> skip;
 
 //============------------ Analyseur syntaxique ------------============
 
@@ -66,13 +66,16 @@ boucle :DO '{' instructions '}' WHILE cdt;
 condition : IF cdt THEN '{' instructions '}' (ELSE '{' instructions '}')*;
 
 cdt : '('exp oplog exp')';
-exp : exp op_moindre_prio b | b;
-b : b op_prio c | c;
-c : '(' exp ')'| ID | val;
+exp :
+'-' exp
+| '(' exp ')'
+| exp (MUL|DIV) exp
+| exp (PLUS|MOINS) exp
+| INTEGER
+| FLOAT
+| ID
+;
 
-val : INTEGER | FLOAT {};
-op_moindre_prio : PLUS | MOINS ;
-op_prio : MUL | DIV;
 oplog : SUP | INF | EGAL | DIFF ;
 
 ecrire : PRINTFCOMPIL '(' (ID | STRING|ids) ')';

@@ -137,56 +137,6 @@ public interface TinyLanguageSIIListener extends ParseTreeListener {
 	 */
 	void exitExp(TinyLanguageSIIParser.ExpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#b}.
-	 * @param ctx the parse tree
-	 */
-	void enterB(TinyLanguageSIIParser.BContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#b}.
-	 * @param ctx the parse tree
-	 */
-	void exitB(TinyLanguageSIIParser.BContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#c}.
-	 * @param ctx the parse tree
-	 */
-	void enterC(TinyLanguageSIIParser.CContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#c}.
-	 * @param ctx the parse tree
-	 */
-	void exitC(TinyLanguageSIIParser.CContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#val}.
-	 * @param ctx the parse tree
-	 */
-	void enterVal(TinyLanguageSIIParser.ValContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#val}.
-	 * @param ctx the parse tree
-	 */
-	void exitVal(TinyLanguageSIIParser.ValContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#op_moindre_prio}.
-	 * @param ctx the parse tree
-	 */
-	void enterOp_moindre_prio(TinyLanguageSIIParser.Op_moindre_prioContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#op_moindre_prio}.
-	 * @param ctx the parse tree
-	 */
-	void exitOp_moindre_prio(TinyLanguageSIIParser.Op_moindre_prioContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#op_prio}.
-	 * @param ctx the parse tree
-	 */
-	void enterOp_prio(TinyLanguageSIIParser.Op_prioContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#op_prio}.
-	 * @param ctx the parse tree
-	 */
-	void exitOp_prio(TinyLanguageSIIParser.Op_prioContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#oplog}.
 	 * @param ctx the parse tree
 	 */

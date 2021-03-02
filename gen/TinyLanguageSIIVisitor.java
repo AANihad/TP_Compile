@@ -88,36 +88,6 @@ public interface TinyLanguageSIIVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExp(TinyLanguageSIIParser.ExpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#b}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitB(TinyLanguageSIIParser.BContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#c}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitC(TinyLanguageSIIParser.CContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#val}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVal(TinyLanguageSIIParser.ValContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#op_moindre_prio}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOp_moindre_prio(TinyLanguageSIIParser.Op_moindre_prioContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#op_prio}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOp_prio(TinyLanguageSIIParser.Op_prioContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#oplog}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
