@@ -56,13 +56,13 @@ declarations : declarations type ids ';'| ;
 type : INTCOMPIL | FLOATCOMPIL | STRINGCOMPIL;
 ids : ID (',' ID)*;
 
-instructions : instruction instructions | instruction ;
+instructions : instruction instructions? ;
 instruction : inst_a ';' | inst_b;
-inst_a : affectation | lire | ecrire;
-inst_b : condition | boucle;
+inst_a : affectation | lire | ecrire; //instructions suivies d'un ';'
+inst_b : condition | boucle; // instructions sans ';'
 
 affectation : ID AFF (exp | ID | STRING);
-boucle :DO '{' instructions '}' WHILE cdt;
+boucle : DO '{' instructions '}' WHILE cdt;
 condition : IF cdt THEN '{' instructions '}' (ELSE '{' instructions '}')*;
 
 cdt : '('exp oplog exp')';
