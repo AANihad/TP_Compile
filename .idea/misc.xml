@@ -6,12 +6,11 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/src/TinyLanguageSII.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="E:\Documents\IdeaProjects\TP_Compile\src\JavaFiles" />
+          <option name="outputDir" value="E:\Documents\IdeaProjects\TP_Compile\src\" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
-          <option name="pkg" value="" />
+          <option name="pkg" value="gen" />
           <option name="language" value="" />
-          <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
       </list>
     </option>

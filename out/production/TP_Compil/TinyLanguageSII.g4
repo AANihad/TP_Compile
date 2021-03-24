@@ -54,6 +54,7 @@ programme : COMPIL NOM_PROGRAMME '('')''{' declarations START instructions '}';
 
 declarations : declarations type ids ';'
             | ;
+
 type : INTCOMPIL 
     | FLOATCOMPIL 
     | STRINGCOMPIL
@@ -62,6 +63,7 @@ type : INTCOMPIL
 ids : ID (',' ID)*;
 
 instructions : instruction instructions? ;
+
 instruction : inst_a ';' 
             | inst_b
             ;
@@ -75,17 +77,20 @@ inst_b : condition
         | boucle
         ; // instructions sans ';'
 
-affectation : ID AFF (exp | ID | STRING);
+affectation : ID AFF (exp | STRING);
 boucle : DO '{' instructions '}' WHILE cdt;
 condition : IF cdt THEN '{' instructions '}' (ELSE '{' instructions '}')*;
 
 cdt : '('exp oplog exp')';
+
 exp :
     '-' exp
     | '(' exp ')'
     | exp (MUL|DIV) exp
     | exp (PLUS|MOINS) exp
-    | INTEGER
+    | finExp;
+
+finExp : INTEGER
     | FLOAT
     | ID
     ;

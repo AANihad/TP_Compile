@@ -7,39 +7,12 @@
 */
 compil Nom_du_programme ()
 {
-	// Déclaration des variables
-	intCompil term1, term2 ;
+	intCompil term1, term2;
 	floatCompil div ;
 	stringCompil chaine1 ;
 start
 	div = 0 ;
 	// Les valeurs affectées ne sont pas obligatoirement des constantes, mais sont le résultat de l'évaluation d'expressions syntaxiquement et sémantiquement correctes :
 	term2 = term1+1 ;
-	// L’instruction conditionnelle if-then-else (la partie sinon est optionnelle)
-	if (term1 > 0) then {
-		term2 = term2 + 1 ;
-		term1 = term1+1 ;
-	}else{
-		term2 = term2 + 2 ;
-		term3 = term3 / term2 ;
-	}
-	// La boucle do - while (la condition)
-	do {
-		term2 = term3 + 1 ;
-		term1 = term1+1 ;
-		term3 = term3 / term2 ;
-	}while(term1 != 10)
-	// L’instruction de l’ecture
-	scanCompil (term1, term2) ;
-	// term1 et term2 auront le type de ce qu'on lit sur l'entrée.
-	// L’instruction d’écriture
-	printCompil ("Le résultat est") ;
-	printCompil (div) ;
+	
 }
-// Les instructions sont terminées par des points virgules ;
-// Les opérateurs des expressions numériques sont : +, -, *, /
-// Leurs opérandes sont des nombres entiers ou réels
-// Le type de l'expression est entier si tous ses opérandes sont entiers, réel sinon
-// On peut comparer des nombres entre eux par : >, <, ==, !=
-// La priorité des opérateurs est comme suit , par ordre croissant : /, *, +, -, >, <, == , != sauf le cas des parenthèses.
-// L’affectation (=) de variables avec des valeurs entières ou réelles
