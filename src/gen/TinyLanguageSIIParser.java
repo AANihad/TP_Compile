@@ -127,6 +127,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitProgramme(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitProgramme(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ProgrammeContext programme() throws RecognitionException {
@@ -187,6 +192,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitDeclarations(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitDeclarations(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -263,6 +273,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitType(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitType(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final TypeContext type() throws RecognitionException {
@@ -311,6 +326,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitIds(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitIds(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -371,6 +391,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitInstructions(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitInstructions(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final InstructionsContext instructions() throws RecognitionException {
@@ -423,6 +448,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitInstruction(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitInstruction(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -489,6 +519,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitInst_a(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitInst_a(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Inst_aContext inst_a() throws RecognitionException {
@@ -553,6 +588,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitInst_b(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitInst_b(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final Inst_bContext inst_b() throws RecognitionException {
@@ -609,6 +649,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitAffectation(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitAffectation(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -678,6 +723,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitBoucle(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitBoucle(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final BoucleContext boucle() throws RecognitionException {
@@ -738,6 +788,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitCondition(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitCondition(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -815,6 +870,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitCdt(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitCdt(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CdtContext cdt() throws RecognitionException {
@@ -871,6 +931,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitExp(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitExp(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1010,6 +1075,11 @@ public class TinyLanguageSIIParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitFinExp(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitFinExp(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final FinExpContext finExp() throws RecognitionException {
@@ -1058,6 +1128,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitOplog(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitOplog(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1109,6 +1184,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitEcrire(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitEcrire(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1175,6 +1255,11 @@ public class TinyLanguageSIIParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof TinyLanguageSIIListener ) ((TinyLanguageSIIListener)listener).exitLire(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TinyLanguageSIIVisitor ) return ((TinyLanguageSIIVisitor<? extends T>)visitor).visitLire(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 

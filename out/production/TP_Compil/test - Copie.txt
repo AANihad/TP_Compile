@@ -14,7 +14,7 @@ compil Nom_du_programme ()
 start
 	div = 0 ;
 	// Les valeurs affectées ne sont pas obligatoirement des constantes, mais sont le résultat de l'évaluation d'expressions syntaxiquement et sémantiquement correctes :
-	term2 = term1+1 ;
+	term2 = 26 + 1 * 5 ;
 	// L’instruction conditionnelle if-then-else (la partie sinon est optionnelle)
 	if (term1 > 0) then {
 		term2 = term2 + 1 ;

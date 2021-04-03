@@ -24,9 +24,6 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
 
     // Une hash map (liste avec des clés et des valeurs) pour stocker le type de chaque expression
     private HashMap<ParserRuleContext, Integer> types = new HashMap<>();
-
-
-
     private ArrayList<String> errors = new ArrayList<>();
     private TableSymbole table = new TableSymbole();
 
@@ -55,7 +52,6 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         {
             System.out.println("Program compiled with the following errors :");
             for (String error : errors) System.out.println(error);
-
         }
     }
 
@@ -89,32 +85,72 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         }
     }
 
-    // verifier les types des expression
-
+    // Vérifier les types des expression
     @Override
     public void exitExp(TinyLanguageSIIParser.ExpContext ctx) {
         //TODO : je crois qu'on derais vérifier ctx.exp(0) aussi
-
         /** si l'expression est une opération arithmétique
          | exp (MUL|DIV) exp
          | exp (PLUS|MOINS) exp
-         * on verifie la compatibilité des deux types
+         * on verifie la compatibilité des types d'expressions
          */
 
-        if (ctx.exp()!=null) {
-            if (ctx.exp().size() > 1) {
-                if (compatibles(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))))
-                    addCtxType(ctx, typeResultat(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))));
-                else {
-                    addCtxType(ctx, 0);
-                    errors.add("Incompatibilité de types dans l'expression : " + ctx.getText());
-                }
-            } else if(ctx.finExp().ID() != null)
-                addCtxType(ctx, table.getRowByName(ctx.finExp().ID().getText()).type);
-                else  if(ctx.finExp().INTEGER() != null)//if int or float
+        try {
+            if (ctx.exp()!=null) {
+                if (ctx.exp().size() > 1) {
+
+                    // Verifier si exp(0) et exp(1) sont déclarés s'ils sont des idfs
+                    boolean dec1=true, dec2=true;
+                    if (ctx.exp(0).finExp()!= null){
+                        boolean idf1;
+                        idf1 = ctx.exp(0).finExp().ID()!= null;
+                        if (idf1) {
+                            dec1 = table.contains(ctx.exp(0).finExp().ID().toString());
+                            if(!dec1){
+                                errors.add("Identificateur non déclaré : " + ctx.exp(0).finExp().ID().toString());
+                            }
+                        }
+                    }
+                    if (ctx.exp(1).finExp()!= null) {
+                        boolean idf2;
+                        idf2 = ctx.exp(1).finExp().ID() != null;
+                        if (idf2) {
+                            dec2 = table.contains(ctx.exp(1).finExp().ID().toString());
+                            if (!dec2) {
+                                errors.add("Identificateur non déclaré : " + ctx.exp(1).finExp().ID().toString());
+                            }
+                        }
+                    }
+
+                    //Si ce ne sont pas des identificateurs alors dec1 et dec2 auront la valeur initiale
+                    if (dec1 && dec2 && compatibles(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))))
+                        //TODO : On devrait faire la différence entre le résultat de la division des autres résultats, int/int peut donner double
+                        //TODO : Ajouter used
+                        addCtxType(ctx, typeResultat(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))));
+                    else {
+                        addCtxType(ctx, 0);
+                        errors.add("Incompatibilité de types dans l'expression : " + ctx.getText());
+                    }
+                } else  if(ctx.finExp().INTEGER() != null)
                     addCtxType(ctx, INT);
-                else
+
+                else if(ctx.finExp().FLOAT() != null)
                     addCtxType(ctx, FLOAT);
+
+                else if (table.contains(ctx.finExp().ID().getText())) //C'est forcément un ID donc on vérifie s'il est déclaré puis on le trouve dans la ts et on donne son type à l'exp
+                    addCtxType(ctx, table.getRowByName(ctx.finExp().ID().getText()).type);
+
+                else if (!table.contains(ctx.finExp().ID().getText())) //id non déclaré
+                    errors.add("Identificateur non déclaré : " + ctx.getText());                    // insert error not declared
+            }
+        }
+        catch (Exception e){
+            if (ctx.exp().size() > 1) {
+                System.out.println(ctx.exp(1).getText()+" | "+ctx.exp(0).getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
+            }
+            else if (ctx.finExp()!=null)
+                System.out.println(ctx.finExp().getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
+            else System.out.println(ctx.exp().toString());
         }
     }
     /*
@@ -142,28 +178,28 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     }
 
     // Gérer les affectations
-
-
     //TODO verifier les types des deux cotés de l'Affectation
     // et la declaration des expresseions / variables ???
     @Override
     public void exitAffectation(TinyLanguageSIIParser.AffectationContext ctx) {
-        int type1 = table.getRowByName(ctx.ID().getText()).type;
-        int type2 = 0;
-        System.out.println("------------------------");
-        System.out.println(ctx.exp().getText());
 
-        if (ctx.STRING() != null)
-            type2 = 3;
-        if (ctx.exp() != null)
-            type2 = getCtxType(ctx.exp());
+        if (table.contains(ctx.ID().getText()))
+        {
+            int type1 = table.getRowByName(ctx.ID().getText()).type;
+            int type2 = 0;
 
-        System.out.println(ctx.exp());
-        System.out.println("------------aff exited------------");
+//            System.out.println("------------------------");
+//            System.out.println(ctx.exp().getText());
 
-        if(!compatibles(type1, type2))
-            errors.add("incompatibilité de types lors de l'affectation");
+            if (ctx.STRING() != null)
+                type2 = 3;
+            if (ctx.exp() != null)
+                type2 = getCtxType(ctx.exp());
 
+            if(!compatibles(type1, type2))
+                errors.add("incompatibilité de types lors de l'affectation");
+        }
+        else errors.add(ctx.ID().getText()+" variable non déclarée");
     }
 
     private static boolean compatibles (int type1, int type2)
@@ -180,10 +216,10 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     // TODO : à implémenter
     private static int typeResultat (int t1, int t2)
     {
-        if (t1 == t2) return t1;
+        if (t1 == t2)
+            return t1;
         else if((t1 == INT && t2 == FLOAT )|| (t1 == FLOAT && t2 == INT ))
-        return FLOAT;
+            return FLOAT;
         else return 0;// error
     }
-
 }

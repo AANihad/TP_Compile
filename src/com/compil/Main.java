@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
        // try {
                 // create a CharStream that reads from standard input
-                CharStream input = CharStreams.fromFileName("src/test.txt");
+                CharStream input = CharStreams.fromFileName("src/test - Copie.txt");
 
                 // create a lexer that feeds off of input CharStream
                 TinyLanguageSIILexer lexer = new TinyLanguageSIILexer(input);
@@ -25,19 +25,29 @@ public class Main {
                 // create a parser that feeds off the tokens buffer
                 TinyLanguageSIIParser parser = new TinyLanguageSIIParser(tokens);
 
-                ParseTree tree = parser.programme(); // begin parsing at chosen rule
+                // begin parsing at chosen rule
+                ParseTree tree = parser.programme();
+
+                ArrayList<String> errors = new ArrayList<>();
+/*
+                //Initializing the visitor
+                myVisitor visitor = new myVisitor(errors);
+                visitor.visit(tree);
+*/
 
                 // create the Symbols Table and initiate it with an errors array
-                ArrayList<String> errors = new ArrayList<>();
+
                 routinesTS routinesTabSymbol = new routinesTS(errors);
 
                 //A tree walker that can trigger callbacks
                 ParseTreeWalker walker = new ParseTreeWalker();
+
                 // Walk the tree created during the parse
                 walker.walk(routinesTabSymbol, tree);
 
-                System.out.println("/////////////////---- FIN ----///////////////////");
-//                System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+
+                System.out.println("///////////////////---- FIN ----///////////////////");
+                //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         /*} catch (Exception e){
                 if (e.getMessage() != null){
                         System.out.println("Exception caught: "+e.getMessage());
