@@ -118,6 +118,16 @@ public interface TinyLanguageSIIListener extends ParseTreeListener {
 	 */
 	void exitCondition(TinyLanguageSIIParser.ConditionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#instElse}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstElse(TinyLanguageSIIParser.InstElseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#instElse}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstElse(TinyLanguageSIIParser.InstElseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#cdt}.
 	 * @param ctx the parse tree
 	 */
@@ -138,15 +148,25 @@ public interface TinyLanguageSIIListener extends ParseTreeListener {
 	 */
 	void exitExp(TinyLanguageSIIParser.ExpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#finExp}.
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#opMD}.
 	 * @param ctx the parse tree
 	 */
-	void enterFinExp(TinyLanguageSIIParser.FinExpContext ctx);
+	void enterOpMD(TinyLanguageSIIParser.OpMDContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#finExp}.
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#opMD}.
 	 * @param ctx the parse tree
 	 */
-	void exitFinExp(TinyLanguageSIIParser.FinExpContext ctx);
+	void exitOpMD(TinyLanguageSIIParser.OpMDContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#opPM}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpPM(TinyLanguageSIIParser.OpPMContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#opPM}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpPM(TinyLanguageSIIParser.OpPMContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#oplog}.
 	 * @param ctx the parse tree

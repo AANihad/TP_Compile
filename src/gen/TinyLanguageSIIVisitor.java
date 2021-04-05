@@ -77,6 +77,12 @@ public interface TinyLanguageSIIVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCondition(TinyLanguageSIIParser.ConditionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#instElse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInstElse(TinyLanguageSIIParser.InstElseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#cdt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -89,11 +95,17 @@ public interface TinyLanguageSIIVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExp(TinyLanguageSIIParser.ExpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#finExp}.
+	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#opMD}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFinExp(TinyLanguageSIIParser.FinExpContext ctx);
+	T visitOpMD(TinyLanguageSIIParser.OpMDContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#opPM}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpPM(TinyLanguageSIIParser.OpPMContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#oplog}.
 	 * @param ctx the parse tree

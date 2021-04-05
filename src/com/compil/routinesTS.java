@@ -51,7 +51,7 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         else
         {
             System.out.println("Program compiled with the following errors :");
-            for (String error : errors) System.out.println(error);
+            for (String error : errors) System.out.println("\t"+error);
         }
     }
 
@@ -98,27 +98,18 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         try {
             if (ctx.exp()!=null) {
                 if (ctx.exp().size() > 1) {
-
                     // Verifier si exp(0) et exp(1) sont déclarés s'ils sont des idfs
                     boolean dec1=true, dec2=true;
-                    if (ctx.exp(0).finExp()!= null){
-                        boolean idf1;
-                        idf1 = ctx.exp(0).finExp().ID()!= null;
-                        if (idf1) {
-                            dec1 = table.contains(ctx.exp(0).finExp().ID().toString());
-                            if(!dec1){
-                                errors.add("Identificateur non déclaré : " + ctx.exp(0).finExp().ID().toString());
-                            }
+                    if (ctx.exp(0).ID()!= null){
+                        dec1 = table.contains(ctx.exp(0).ID().toString());
+                        if(!dec1){
+                            errors.add("Identificateur non déclaré : " + ctx.exp(0).ID().toString());
                         }
                     }
-                    if (ctx.exp(1).finExp()!= null) {
-                        boolean idf2;
-                        idf2 = ctx.exp(1).finExp().ID() != null;
-                        if (idf2) {
-                            dec2 = table.contains(ctx.exp(1).finExp().ID().toString());
-                            if (!dec2) {
-                                errors.add("Identificateur non déclaré : " + ctx.exp(1).finExp().ID().toString());
-                            }
+                    if (ctx.exp(1).ID()!= null) {
+                        dec2 = table.contains(ctx.exp(1).ID().toString());
+                        if (!dec2) {
+                            errors.add("Identificateur non déclaré : " + ctx.exp(1).ID().toString());
                         }
                     }
 
@@ -131,16 +122,16 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                         addCtxType(ctx, 0);
                         errors.add("Incompatibilité de types dans l'expression : " + ctx.getText());
                     }
-                } else  if(ctx.finExp().INTEGER() != null)
+                } else  if(ctx.INTEGER() != null)
                     addCtxType(ctx, INT);
 
-                else if(ctx.finExp().FLOAT() != null)
+                else if(ctx.FLOAT() != null)
                     addCtxType(ctx, FLOAT);
 
-                else if (table.contains(ctx.finExp().ID().getText())) //C'est forcément un ID donc on vérifie s'il est déclaré puis on le trouve dans la ts et on donne son type à l'exp
-                    addCtxType(ctx, table.getRowByName(ctx.finExp().ID().getText()).type);
+                else if (table.contains(ctx.ID().getText())) //C'est forcément un ID donc on vérifie s'il est déclaré puis on le trouve dans la ts et on donne son type à l'exp
+                    addCtxType(ctx, table.getRowByName(ctx.ID().getText()).type);
 
-                else if (!table.contains(ctx.finExp().ID().getText())) //id non déclaré
+                else if (!table.contains(ctx.ID().getText())) //id non déclaré
                     errors.add("Identificateur non déclaré : " + ctx.getText());                    // insert error not declared
             }
         }
@@ -148,8 +139,8 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
             if (ctx.exp().size() > 1) {
                 System.out.println(ctx.exp(1).getText()+" | "+ctx.exp(0).getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
             }
-            else if (ctx.finExp()!=null)
-                System.out.println(ctx.finExp().getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
+            else if (ctx.exp()!=null)
+                System.out.println(ctx.getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
             else System.out.println(ctx.exp().toString());
         }
     }
@@ -182,7 +173,6 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     // et la declaration des expresseions / variables ???
     @Override
     public void exitAffectation(TinyLanguageSIIParser.AffectationContext ctx) {
-
         if (table.contains(ctx.ID().getText()))
         {
             int type1 = table.getRowByName(ctx.ID().getText()).type;

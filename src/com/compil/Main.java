@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
        // try {
                 // create a CharStream that reads from standard input
-                CharStream input = CharStreams.fromFileName("src/test - Copie.txt");
+                CharStream input = CharStreams.fromFileName("src/test.txt");
 
                 // create a lexer that feeds off of input CharStream
                 TinyLanguageSIILexer lexer = new TinyLanguageSIILexer(input);
@@ -27,7 +27,6 @@ public class Main {
 
                 // begin parsing at chosen rule
                 ParseTree tree = parser.programme();
-
                 ArrayList<String> errors = new ArrayList<>();
 /*
                 //Initializing the visitor
@@ -36,17 +35,18 @@ public class Main {
 */
 
                 // create the Symbols Table and initiate it with an errors array
-
                 routinesTS routinesTabSymbol = new routinesTS(errors);
+                routinesQuad routinesQuadruplets = new routinesQuad(errors);
 
                 //A tree walker that can trigger callbacks
                 ParseTreeWalker walker = new ParseTreeWalker();
 
                 // Walk the tree created during the parse
                 walker.walk(routinesTabSymbol, tree);
+                walker.walk(routinesQuadruplets, tree);
 
 
-                System.out.println("///////////////////---- FIN ----///////////////////");
+                System.out.println("///////////////////---- COMPILING COMPLETED ----///////////////////");
                 //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         /*} catch (Exception e){
                 if (e.getMessage() != null){

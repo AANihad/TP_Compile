@@ -23,16 +23,14 @@ PLUS : '+';
 MOINS : '-';
 MUL : '*';
 DIV : '/';
+
 SUP : '>';
 INF : '<';
-
+SUPE : '>=';
+INFE : '<=';
 EGAL : '==';
 DIFF : '!=';
 AFF : '=';
-/* Ajouter s'il nous reste du temps
-SUPERIEUR OU EGAL
-INFERIEUR OU EGAL
-*/
 
 
 //Expressions régulières
@@ -79,24 +77,31 @@ inst_b : condition
 
 affectation : ID AFF (exp | STRING);
 boucle : DO '{' instructions '}' WHILE cdt;
-condition : IF cdt THEN '{' instructions '}' (ELSE '{' instructions '}')*;
+condition : IF cdt THEN '{' instructions '}' (instElse '{' instructions '}')*;
+instElse : ELSE; // pour pouvoir génerer les quadruplets
+
 
 cdt : '('exp oplog exp')';
 
 exp :
     '-' exp
     | '(' exp ')'
-    | exp (MUL|DIV) exp
-    | exp (PLUS|MOINS) exp
-    | finExp;
-
-finExp : INTEGER
+    | exp opMD exp
+    | exp opPM exp
+    | INTEGER
     | FLOAT
     | ID
     ;
 
+opMD : MUL
+    | DIV;
+opPM : PLUS
+    | MOINS;
+
 oplog : SUP 
-    | INF 
+    | INF
+    | SUPE
+    | INFE
     | EGAL 
     | DIFF
     ;

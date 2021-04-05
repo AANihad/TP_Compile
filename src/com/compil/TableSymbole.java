@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * - Mise à jour d'une valeur d'une variable
  */
 public class TableSymbole {
-
     //declaring the TS as an array of row
     public ArrayList<row> rows = new ArrayList<row>();
 
@@ -22,10 +21,7 @@ public class TableSymbole {
         boolean used;
 
         //Pour représenter la valeur donnée à la variable TODO : à implémenter
-        int init_I;
-        double init_D;
-        String init_S;
-        Object init; // TODO on pourra remplacer object par une structure valeur
+        elementValue init; // TODO on pourra remplacer object par une structure valeur
 
         public row(String name, int declared, int type) {
             this.name = name;
@@ -45,10 +41,12 @@ public class TableSymbole {
         @Override
         public String toString()
         {
-            String dec = (declared == 1)? "declared":"undeclared";
-            return " | " + name + " | "
-                    + ((type==1)?"intcompil":"floatcompil")
-                    + " | " + dec;
+            String dec = (declared == 1)? "\tDECLARED":"\tUNDECLARED";
+            String val = (init!=null)? init.toString():"";
+            String n = (name.length()>5)? "\t"+name+"\t\t\t": "\t\t"+name+"\t\t";
+            return "| " + n + " |"
+                    + ((type==1)?"\t  intcompil\t":"\t\tfloatcompil\t")
+                    + " |\t" + dec + " \t\t|\t"+val;
         }
 
         public String getName() {
@@ -83,18 +81,21 @@ public class TableSymbole {
             this.used = used;
         }
 
-        public Object getInit() {
+        public elementValue getInit() {
             return init;
         }
 
-        public void setInit(Object init) {
+        public void setInit(elementValue init) {
             this.init = init;
         }
     }
 
     public void display() {
         System.out.println("Table des Symboles : ");
-        System.out.println("\n========================================================");
+        System.out.println("%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%");
+        System.out.println("\tIdentifier\t\t| \t\t Type \t\t | \t\t Declared \t\t|\t\t Value \t\t |");
+        System.out.println("%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%");
+
         for (row r: rows) {
             System.out.println(r.toString());
         }
@@ -131,7 +132,7 @@ public class TableSymbole {
     }
 
     //permet de donner une valeur à un objet TODO On pourra remplacer l'objet par une structure personnalisée int, douuble& String
-    public void putValue(String name, Object o){
+    public void putValue(String name, elementValue o){
         for (TableSymbole.row row : rows)
             if (row.name.compareTo(name) == 0)
                 row.setInit(o);
