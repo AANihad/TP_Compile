@@ -128,15 +128,25 @@ public interface TinyLanguageSIIListener extends ParseTreeListener {
 	 */
 	void exitInstElse(TinyLanguageSIIParser.InstElseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#cdt}.
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#cdtIF}.
 	 * @param ctx the parse tree
 	 */
-	void enterCdt(TinyLanguageSIIParser.CdtContext ctx);
+	void enterCdtIF(TinyLanguageSIIParser.CdtIFContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#cdt}.
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#cdtIF}.
 	 * @param ctx the parse tree
 	 */
-	void exitCdt(TinyLanguageSIIParser.CdtContext ctx);
+	void exitCdtIF(TinyLanguageSIIParser.CdtIFContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#cdtDO}.
+	 * @param ctx the parse tree
+	 */
+	void enterCdtDO(TinyLanguageSIIParser.CdtDOContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#cdtDO}.
+	 * @param ctx the parse tree
+	 */
+	void exitCdtDO(TinyLanguageSIIParser.CdtDOContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#exp}.
 	 * @param ctx the parse tree

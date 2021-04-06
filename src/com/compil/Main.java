@@ -11,6 +11,7 @@ visitor methods must walk their children with explicit visit calls.
  */
 
 public class Main {
+
     public static void main(String[] args) throws Exception {
        // try {
                 // create a CharStream that reads from standard input
@@ -45,7 +46,7 @@ public class Main {
                 walker.walk(routinesTabSymbol, tree);
                 walker.walk(routinesQuadruplets, tree);
 
-
+                routinesQuadruplets.getTable().display();
                 System.out.println("///////////////////---- COMPILING COMPLETED ----///////////////////");
                 //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         /*} catch (Exception e){

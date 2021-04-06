@@ -91,7 +91,7 @@ public class TableSymbole {
     }
 
     public void display() {
-        System.out.println("Table des Symboles : ");
+        System.out.println("\t\t\t\t\t\t\t\tSYMBOLS TABLE");
         System.out.println("%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%");
         System.out.println("\tIdentifier\t\t| \t\t Type \t\t | \t\t Declared \t\t|\t\t Value \t\t |");
         System.out.println("%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%%%%%");

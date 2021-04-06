@@ -1,17 +1,13 @@
-/*
-	Les mots clé sont en gras minuscules
-	Le nom du programme commence par une lettre majuscule
-	Les identificateurs commencent par une lettre éventuellement suivie de lettres ou de chiffres
-	On distingue les majuscules et les minuscules : a et A ne sont pas le même identificateur
-	La structure générale d’un programme TinyLanguage_SII
-*/
 compil Nom_du_programme ()
 {
-	intCompil term1, term2;
-	floatCompil div ;
-	stringCompil chaine1 ;
+	intCompil term1, term2, term3;
+	stringCompil cA, aB, jS, aC, kH, cP;
 start
-	div = 0 ;
-	// Les valeurs affectées ne sont pas obligatoirement des constantes, mais sont le résultat de l'évaluation d'expressions syntaxiquement et sémantiquement correctes :
-	term2 = term1+1 ;
+    if (term1 > 0) then {
+            term1 = term1+1 ;
+    }else{
+        do {
+            term1 = term1+1 ;
+        } while(term1 != 10)
+    }
 }

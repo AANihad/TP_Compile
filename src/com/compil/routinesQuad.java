@@ -11,39 +11,48 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
 
     private ArrayList<String> errors = new ArrayList<>();
     private LinkedList<String> stack = new LinkedList<>();
-    private tableQuad table = new tableQuad();
+    private tableQuadruplets table = new tableQuadruplets();
 
     private static HashMap<String,String> branchements = new HashMap<>();
-    private int QC = 0, sauvQC;
+    private int compteurT = 0, sauvQCIf, sauvQcDo;
 
     public routinesQuad(ArrayList<String> errors) {
         this.errors = errors;
-        branchements.put(">","BLE");        //SUP : '>';
-        branchements.put("<","BGE");        //INF : '<';
-        branchements.put(">=","BL");        //SUPE : '>=';
-        branchements.put("<=","BG");        //INFE : '<=';
-        branchements.put("==","BNE");       //EGAL : '==';
-        branchements.put("!=","BE");        //DIFF : '!=';
-
+        branchements.put(">","BG");        //(">","BG");
+        branchements.put("<","BL");        //("<","BL");
+        branchements.put(">=","BGE");      //(">=","BGE");
+        branchements.put("<=","BLE");      //("<=","BLE");
+        branchements.put("==","BE");       //("==","BE");
+        branchements.put("!=","BNE");      //("!=","BNE");
+        /*
+            branchements.put(">","BLE");        //SUP : '>';
+            branchements.put("<","BGE");        //INF : '<';
+            branchements.put(">=","BL");        //SUPE : '>=';
+            branchements.put("<=","BG");        //INFE : '<=';
+            branchements.put("==","BNE");       //EGAL : '==';
+            branchements.put("!=","BE");        //DIFF : '!=';
+        */
     }
 
     @Override
     public void exitProgramme(TinyLanguageSIIParser.ProgrammeContext ctx) {
+        table.add("END", " ", " ", " ");
         if (errors.size()>0) {
-            System.out.println("No quads generated while there are still errors");
-            return;
+            System.out.println("Quads generated while there are still semantic errors");
+//            return;
         }
-        table.add("", "", "", "");
+        //else
+            //table.display();
     }
 
     @Override
     public void exitExp(TinyLanguageSIIParser.ExpContext ctx) {
-        System.out.println("-- "+ctx.getText()+"  .  "+ctx.exp().size());
+//        System.out.println("-- "+ctx.getText()+"  .  "+ctx.exp().size());
         if(ctx.exp().size()==2){
             String op = (ctx.opMD()!=null)? ctx.opMD().getText() :ctx.opPM().getText();
             String s1 = stack.removeLast();
             String s2 = stack.removeLast();
-            String T = "T"+(++QC);
+            String T = "T"+(++compteurT);
             stack.add(T);
             //System.out.println("..."+op+"  .  "+s2+"  .  "+s1+"  .  "+T);
             table.add(op, s2, s1,T);
@@ -55,47 +64,80 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
         }
     }
 
-    /*
-    @Override
-    public void exitFinExp(TinyLanguageSIIParser.FinExpContext ctx) {
-        if(ctx!=null){
-            String op = (ctx.!=null)? ctx.opMD().getText() :ctx.opPM().getText();
-            String s1 = stack.removeLast();
-            String s2 = stack.removeLast();
-            String T = "Temp"+(++QC);
-            stack.add(T);
-            table.add(new tableQuad.quadruple(op, s2, s1,T));
-        }
-    }*/
-
     @Override
     public void exitAffectation(TinyLanguageSIIParser.AffectationContext ctx) {
         // si on est là c'est qu'on est forcément passés par une expression (fin exp) et donc on a empilé un id
-        String s = stack.removeLast();
-        table.add("=", s, "",ctx.ID().getText());
+        String tmp = stack.removeLast();
+        table.add("=", " ", tmp,ctx.ID().getText());
     }
 
+/*
+    boucle : DO '{' instructions '}' WHILE cdt;
+    condition : IF cdt THEN '{' instructions '}' (instElse '{' instructions '}')*;
+    cdt : '('exp oplog exp')';
+*/
     @Override
     public void exitCondition(TinyLanguageSIIParser.ConditionContext ctx) {
-        table.getQuad(sauvQC).setQuads(1,table.getSize()+""); // TODO pos = 1 or 3?
+        table.getQuad(sauvQCIf).setOp(1,table.getSize()+"");
     }
 
     @Override
     public void exitInstElse(TinyLanguageSIIParser.InstElseContext ctx) {
-        table.getQuad(sauvQC).setQuads(3, table.getSize()+1+"");
-        sauvQC = table.add(new tableQuad.quadruple("BR", "", "", ""));
+        table.getQuad(sauvQCIf).setOp(3, table.getSize()+"");//table.getSize()
+        sauvQCIf = table.add(new tableQuadruplets.quadruple("BR", " ", " ", " "));
     }
 
     @Override
-    public void exitCdt(TinyLanguageSIIParser.CdtContext ctx) {
-
-        System.out.println("Condition : "+ctx.getText());
+    public void exitCdtIF(TinyLanguageSIIParser.CdtIFContext ctx) {
+        //System.out.println("zzzzzzzzz");
         String gauche = stack.removeLast();
         String droite = stack.removeLast();
-        tableQuad.quadruple q = new tableQuad.quadruple(branchements.get(ctx.oplog().getText()), gauche,droite, "");
+        tableQuadruplets.quadruple q = new tableQuadruplets.quadruple(branchements.get(ctx.oplog().getText()), gauche,droite, "");
+//      table.add(branchements.get(ctx.oplog().getText()), gauche,droite, "");
 
-        System.out.println(q.toString());
+        sauvQCIf = table.add(q);
+    }
 
-        sauvQC = table.add(q);
+    @Override
+    public void exitCdtDO(TinyLanguageSIIParser.CdtDOContext ctx) {
+        String gauche = stack.removeLast();
+        String droite = stack.removeLast();
+        table.add(branchements.get(ctx.oplog().getText()), gauche,droite, "");
+    }
+
+    @Override
+    public void enterBoucle(TinyLanguageSIIParser.BoucleContext ctx) {
+        sauvQcDo = table.getSize();
+    }
+
+    @Override
+    public void exitBoucle(TinyLanguageSIIParser.BoucleContext ctx) {
+        table.getQuad(table.getSize()-1).setOp(3, sauvQcDo +"");
+    }
+
+    @Override
+    public void exitEcrire(TinyLanguageSIIParser.EcrireContext ctx) {
+        if (ctx.getChild(2).getChildCount()>1){
+            for (int i=0; i<ctx.getChild(2).getChildCount(); i++)
+                if (!ctx.ids().children.get(i).getText().equals(","))
+                    table.add("WRITE", ctx.getChild(2).getChild(i).getText(), " ", " ");
+
+        }
+        else
+            table.add("WRITE", ctx.getChild(2).getText(), " ", " ");
+
+
+    }
+
+    @Override
+    public void exitLire(TinyLanguageSIIParser.LireContext ctx) {
+        for (int i=0; i<ctx.ids().getChildCount(); i++)
+            if (!ctx.ids().children.get(i).getText().equals(","))
+                table.add("READ", ctx.ids().children.get(i).getText(), " ", " ");
+
+    }
+
+    public tableQuadruplets getTable() {
+        return table;
     }
 }

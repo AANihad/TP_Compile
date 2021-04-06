@@ -101,7 +101,14 @@ public class TinyLanguageSIIBaseVisitor<T> extends AbstractParseTreeVisitor<T> i
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitCdt(TinyLanguageSIIParser.CdtContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCdtIF(TinyLanguageSIIParser.CdtIFContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitCdtDO(TinyLanguageSIIParser.CdtDOContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

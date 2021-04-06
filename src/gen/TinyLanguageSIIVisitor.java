@@ -83,11 +83,17 @@ public interface TinyLanguageSIIVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInstElse(TinyLanguageSIIParser.InstElseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#cdt}.
+	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#cdtIF}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCdt(TinyLanguageSIIParser.CdtContext ctx);
+	T visitCdtIF(TinyLanguageSIIParser.CdtIFContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#cdtDO}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCdtDO(TinyLanguageSIIParser.CdtDOContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TinyLanguageSIIParser#exp}.
 	 * @param ctx the parse tree

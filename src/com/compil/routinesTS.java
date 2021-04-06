@@ -44,7 +44,7 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     @Override
     public void exitProgramme(TinyLanguageSIIParser.ProgrammeContext ctx){
         if (errors.size() == 0) {
-            System.out.println("No errors found !");
+            System.out.println("No semantic errors found !");
             clearMap();
             table.display();
         }
@@ -144,29 +144,6 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
             else System.out.println(ctx.exp().toString());
         }
     }
-    /*
-    @Override
-    public void exitFinExp(TinyLanguageSIIParser.FinExpContext ctx) {
-        if(ctx.ID() != null)
-            addCtxType(ctx, table.getRowByName(ctx.ID().getText()).type);
-        else  if(ctx.INTEGER() != null)//if int or float
-            addCtxType(ctx, INT);
-        else
-            addCtxType(ctx, FLOAT);
-    }*/
-
-    // Méthodes  pour gérer les types des expressions
-    private void addCtxType(ParserRuleContext ctx, int type)
-    {
-        types.put(ctx,type);
-    }
-
-    private int getCtxType(ParserRuleContext ctx) { return types.get(ctx); }
-
-    private void clearMap()
-    {
-        types.clear();
-    }
 
     // Gérer les affectations
     //TODO verifier les types des deux cotés de l'Affectation
@@ -192,6 +169,42 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         else errors.add(ctx.ID().getText()+" variable non déclarée");
     }
 
+    @Override
+    public void exitEcrire(TinyLanguageSIIParser.EcrireContext ctx) { // TODO : A revérifier
+        //verifier si les variables sont déclarées
+        if (ctx.getChild(2).getChildCount()>1){
+            for (int i=0; i<ctx.getChild(2).getChildCount(); i++)
+                if (!ctx.ids().children.get(i).getText().equals(",") && !table.contains(ctx.ids().children.get(i).getText()))
+                    errors.add("Identificateur non déclaré : " + ctx.ids().children.get(i).getText());
+        }
+        else{
+            if (!table.contains(ctx.getChild(2).getText()))
+                errors.add("Identificateur non déclaré : " +  ctx.getChild(2).getText());
+        }
+
+    }
+
+    @Override
+    public void exitLire(TinyLanguageSIIParser.LireContext ctx) {// TODO : A revérifier
+        //verifier si les variables sont déclarées
+        for (int i=0; i<ctx.ids().getChildCount(); i++)
+            if (!ctx.ids().children.get(i).getText().equals(",") && !table.contains(ctx.ids().children.get(i).getText()))
+                errors.add("Identificateur non déclaré : " + ctx.ids().children.get(i).getText());
+    }
+
+    // Méthodes  pour gérer les types des expressions
+    private void addCtxType(ParserRuleContext ctx, int type)
+    {
+        types.put(ctx,type);
+    }
+
+    private int getCtxType(ParserRuleContext ctx) { return types.get(ctx); }
+
+    private void clearMap()
+    {
+        types.clear();
+    }
+
     private static boolean compatibles (int type1, int type2)
     {
         // on peut affecter entier à entier ou float
@@ -212,4 +225,5 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
             return FLOAT;
         else return 0;// error
     }
+
 }

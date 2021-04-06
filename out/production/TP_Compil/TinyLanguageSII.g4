@@ -76,12 +76,12 @@ inst_b : condition
         ; // instructions sans ';'
 
 affectation : ID AFF (exp | STRING);
-boucle : DO '{' instructions '}' WHILE cdt;
-condition : IF cdt THEN '{' instructions '}' (instElse '{' instructions '}')*;
+boucle : DO '{' instructions '}' WHILE cdtDO;
+condition : IF cdtIF THEN '{' instructions '}' (instElse '{' instructions '}')*;
 instElse : ELSE; // pour pouvoir génerer les quadruplets
 
-
-cdt : '('exp oplog exp')';
+cdtIF : '('exp oplog exp')';
+cdtDO : '('exp oplog exp')';
 
 exp :
     '-' exp
@@ -106,5 +106,6 @@ oplog : SUP
     | DIFF
     ;
 
-ecrire : PRINTFCOMPIL '(' (ID | STRING|ids) ')';
+ecrire : PRINTFCOMPIL '(' (ID | STRING | ids) ')';
+//ecrire : PRINTFCOMPIL '(' (STRING | ids) ')';
 lire : SCANCOMPIL '(' ids ')';
