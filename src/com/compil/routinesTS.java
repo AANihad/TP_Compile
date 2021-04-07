@@ -22,6 +22,11 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     private static final int DECLARED = 1;
     private static final int UNDECLARED = 0;
 
+    private static final String ERR_NO_DEC =" variable non declared : ";
+    private static final String ERR_DIV_Z =" numeric overflow : ";
+    private static final String ERR_DOUBLE_DEC =" double declaration : ";
+    private static final String ERR_INCOMPATIBILITY =" type mismatch : ";
+
     // Une hash map (liste avec des clés et des valeurs) pour stocker le type de chaque expression
     private HashMap<ParserRuleContext, Integer> types = new HashMap<>();
     private ArrayList<String> errors = new ArrayList<>();
@@ -75,7 +80,7 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
             {
                 String nomVariable = idVariables.ID(i).getText();
                 if(table.contains(nomVariable)) { // Ajouter une erreur à la liste d'erreurs
-                    errors.add("Double déclaration de la variable: "+nomVariable);
+                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_DOUBLE_DEC + nomVariable );
                 }
                 else //ajouter l'element à la table
                     table.add(new TableSymbole.row(nomVariable, DECLARED, type));
@@ -97,30 +102,33 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
 
         try {
             if (ctx.exp()!=null) {
-                if (ctx.exp().size() > 1) {
-                    // Verifier si exp(0) et exp(1) sont déclarés s'ils sont des idfs
+                if (ctx.exp().size() > 1) { // Dans le cas exp op exp verifier que les 2 expression ont été déclarées si elles sont des ID
                     boolean dec1=true, dec2=true;
                     if (ctx.exp(0).ID()!= null){
                         dec1 = table.contains(ctx.exp(0).ID().toString());
                         if(!dec1){
-                            errors.add("Identificateur non déclaré : " + ctx.exp(0).ID().toString());
+                            errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ ctx.exp(0).ID().toString());
                         }
                     }
                     if (ctx.exp(1).ID()!= null) {
                         dec2 = table.contains(ctx.exp(1).ID().toString());
                         if (!dec2) {
-                            errors.add("Identificateur non déclaré : " + ctx.exp(1).ID().toString());
+                            errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ ctx.exp(1).ID().toString());
                         }
                     }
 
-                    //Si ce ne sont pas des identificateurs alors dec1 et dec2 auront la valeur initiale
-                    if (dec1 && dec2 && compatibles(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))))
-                        //TODO : On devrait faire la différence entre le résultat de la division des autres résultats, int/int peut donner double
-                        //TODO : Ajouter used
-                        addCtxType(ctx, typeResultat(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))));
-                    else {
+                    // Si c'est un division virifier que le deuxième opérateur est différent de 0
+                    if (ctx.opMD()!=null && ctx.opMD().getText().equals("/") && ctx.exp(1).getText().equals("0")){
                         addCtxType(ctx, 0);
-                        errors.add("Incompatibilité de types dans l'expression : " + ctx.getText());
+                        errors.add("Semantic error at line " + ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine() + ERR_DIV_Z + ctx.getText());
+                    }
+
+                    //Si ce ne sont pas des identificateurs alors dec1 et dec2 auront la valeur initiale
+                    if (dec1 && dec2 && compatibles(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1)))) {
+                            addCtxType(ctx, typeResultat(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1))));
+                    }else {
+                        addCtxType(ctx, 0);
+                        errors.add("Semantic error at line " + ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine() + ERR_INCOMPATIBILITY + ctx.getText());
                     }
                 } else  if(ctx.INTEGER() != null)
                     addCtxType(ctx, INT);
@@ -132,22 +140,20 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                     addCtxType(ctx, table.getRowByName(ctx.ID().getText()).type);
 
                 else if (!table.contains(ctx.ID().getText())) //id non déclaré
-                    errors.add("Identificateur non déclaré : " + ctx.getText());                    // insert error not declared
+                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+  ctx.getText());
             }
         }
         catch (Exception e){
             if (ctx.exp().size() > 1) {
-                System.out.println(ctx.exp(1).getText()+" | "+ctx.exp(0).getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
+                System.out.println(ctx.exp(1).getText()+" | "+ctx.exp(0).getText()+" line "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
             }
             else if (ctx.exp()!=null)
-                System.out.println(ctx.getText()+" line: "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
-            else System.out.println(ctx.exp().toString());
+                System.out.println(ctx.getText()+" line "+e.getStackTrace()[0].getLineNumber()+" error: "+e.toString());
+            else System.out.println(""+ctx.exp().toString());
         }
     }
 
     // Gérer les affectations
-    //TODO verifier les types des deux cotés de l'Affectation
-    // et la declaration des expresseions / variables ???
     @Override
     public void exitAffectation(TinyLanguageSIIParser.AffectationContext ctx) {
         if (table.contains(ctx.ID().getText()))
@@ -164,9 +170,10 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                 type2 = getCtxType(ctx.exp());
 
             if(!compatibles(type1, type2))
-                errors.add("incompatibilité de types lors de l'affectation");
+                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_INCOMPATIBILITY+ctx.ID().getText() );
         }
-        else errors.add(ctx.ID().getText()+" variable non déclarée");
+        else
+            errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ID().getText() );
     }
 
     @Override
@@ -175,11 +182,10 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         if (ctx.getChild(2).getChildCount()>1){
             for (int i=0; i<ctx.getChild(2).getChildCount(); i++)
                 if (!ctx.ids().children.get(i).getText().equals(",") && !table.contains(ctx.ids().children.get(i).getText()))
-                    errors.add("Identificateur non déclaré : " + ctx.ids().children.get(i).getText());
-        }
+                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ids().children.get(i).getText() ); }
         else{
             if (!table.contains(ctx.getChild(2).getText()))
-                errors.add("Identificateur non déclaré : " +  ctx.getChild(2).getText());
+                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.getChild(2).getText());
         }
 
     }
@@ -189,7 +195,7 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         //verifier si les variables sont déclarées
         for (int i=0; i<ctx.ids().getChildCount(); i++)
             if (!ctx.ids().children.get(i).getText().equals(",") && !table.contains(ctx.ids().children.get(i).getText()))
-                errors.add("Identificateur non déclaré : " + ctx.ids().children.get(i).getText());
+                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.ids().children.get(i).getText());
     }
 
     // Méthodes  pour gérer les types des expressions
@@ -211,19 +217,21 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
         // on peut affecter un float à un float seulement
         // on ne peut affecter float ou un entier à string ni l'inverse
 
+        /*int 1
+        float 2
+        string 3*/
+
         if (type1==FLOAT)
-            return type2!=STRING;
+            return type2!=STRING; //type2!=3
         else return type2 == type1; // int = int ou string = string
     }
 
-    // TODO : à implémenter
     private static int typeResultat (int t1, int t2)
     {
         if (t1 == t2)
             return t1;
         else if((t1 == INT && t2 == FLOAT )|| (t1 == FLOAT && t2 == INT ))
             return FLOAT;
-        else return 0;// error
+        else return -1; //error
     }
-
 }

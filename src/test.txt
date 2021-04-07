@@ -1,13 +1,12 @@
 compil Nom_du_programme ()
 {
-	intCompil term1, term2, term3;
-	stringCompil cA, aB, jS, aC, kH, cP;
+	intCompil p, k, a,b ;
 start
-    if (term1 > 0) then {
-            term1 = term1+1 ;
+	if (a > b) then {
+    	p=p+1;
     }else{
-        do {
-            term1 = term1+1 ;
-        } while(term1 != 10)
+        do{
+            k = k+1;
+        }while(b<a)
     }
 }

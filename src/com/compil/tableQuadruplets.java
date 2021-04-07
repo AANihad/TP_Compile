@@ -5,7 +5,8 @@ public class tableQuadruplets {
 
     public ArrayList<quadruple> table = new ArrayList<quadruple>();
     public static class quadruple {
-        String[] op;
+        private String[] op;
+        private Boolean isPointedAt = false;
 
         public quadruple(String op, String op1, String op2, String result) {
             this.op = new String[4];
@@ -20,8 +21,16 @@ public class tableQuadruplets {
             return op[i];
         }
 
-        public void setOp (int pos, String op) {
-            this.op[pos] = op;
+        public void setOp (int position, String op) {
+            this.op[position] = op;
+        }
+
+        public Boolean getPointedAt() {
+            return isPointedAt;
+        }
+
+        public void setPointedAt(Boolean pointedAt) {
+            isPointedAt = pointedAt;
         }
 
         @Override

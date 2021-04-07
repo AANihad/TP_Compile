@@ -24,14 +24,14 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
         branchements.put("<=","BLE");      //("<=","BLE");
         branchements.put("==","BE");       //("==","BE");
         branchements.put("!=","BNE");      //("!=","BNE");
-        /*
+/*
             branchements.put(">","BLE");        //SUP : '>';
             branchements.put("<","BGE");        //INF : '<';
             branchements.put(">=","BL");        //SUPE : '>=';
             branchements.put("<=","BG");        //INFE : '<=';
             branchements.put("==","BNE");       //EGAL : '==';
             branchements.put("!=","BE");        //DIFF : '!=';
-        */
+*/
     }
 
     @Override
@@ -39,10 +39,10 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
         table.add("END", " ", " ", " ");
         if (errors.size()>0) {
             System.out.println("Quads generated while there are still semantic errors");
-//            return;
+            return;
         }
-        //else
-            //table.display();
+        /*else
+            table.display();*/
     }
 
     @Override
@@ -79,23 +79,26 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
     @Override
     public void exitCondition(TinyLanguageSIIParser.ConditionContext ctx) {
         table.getQuad(sauvQCIf).setOp(1,table.getSize()+"");
+
     }
 
     @Override
     public void exitInstElse(TinyLanguageSIIParser.InstElseContext ctx) {
-        table.getQuad(sauvQCIf).setOp(3, table.getSize()+"");//table.getSize()
+        table.getQuad(sauvQCIf).setOp(3, table.getSize()+1+"");//table.getSize()
+
         sauvQCIf = table.add(new tableQuadruplets.quadruple("BR", " ", " ", " "));
     }
 
     @Override
     public void exitCdtIF(TinyLanguageSIIParser.CdtIFContext ctx) {
-        //System.out.println("zzzzzzzzz");
         String gauche = stack.removeLast();
         String droite = stack.removeLast();
         tableQuadruplets.quadruple q = new tableQuadruplets.quadruple(branchements.get(ctx.oplog().getText()), gauche,droite, "");
 //      table.add(branchements.get(ctx.oplog().getText()), gauche,droite, "");
 
         sauvQCIf = table.add(q);
+        table.getQuad(table.getSize()-1).setPointedAt(true);
+
     }
 
     @Override
@@ -103,6 +106,7 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
         String gauche = stack.removeLast();
         String droite = stack.removeLast();
         table.add(branchements.get(ctx.oplog().getText()), gauche,droite, "");
+        table.getQuad(table.getSize()-1).setPointedAt(true);
     }
 
     @Override

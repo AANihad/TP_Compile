@@ -1,6 +1,7 @@
 package com.compil;
 import gen.*;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.tree.*;
 import java.util.ArrayList;
 
@@ -12,8 +13,10 @@ visitor methods must walk their children with explicit visit calls.
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-       // try {
+    public static void main(String[] args) {
+        try {
+                ArrayList<String> errors = new ArrayList<>();
+
                 // create a CharStream that reads from standard input
                 CharStream input = CharStreams.fromFileName("src/test.txt");
 
@@ -23,17 +26,17 @@ public class Main {
                 // create a buffer of tokens pulled from the lexer
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
 
+                //Handeling errors
+                errorListener eListener = new errorListener(errors);
+
                 // create a parser that feeds off the tokens buffer
                 TinyLanguageSIIParser parser = new TinyLanguageSIIParser(tokens);
+                parser.removeErrorListeners();
+                parser.addErrorListener(eListener);
+                parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
 
                 // begin parsing at chosen rule
                 ParseTree tree = parser.programme();
-                ArrayList<String> errors = new ArrayList<>();
-/*
-                //Initializing the visitor
-                myVisitor visitor = new myVisitor(errors);
-                visitor.visit(tree);
-*/
 
                 // create the Symbols Table and initiate it with an errors array
                 routinesTS routinesTabSymbol = new routinesTS(errors);
@@ -44,17 +47,23 @@ public class Main {
 
                 // Walk the tree created during the parse
                 walker.walk(routinesTabSymbol, tree);
-                walker.walk(routinesQuadruplets, tree);
+            ocGenerator oc = new ocGenerator();
 
-                routinesQuadruplets.getTable().display();
+
+            if (errors.size()==0) {
+                     walker.walk(routinesQuadruplets, tree);
+                     routinesQuadruplets.getTable().display();
+                     oc.Assemble(routinesQuadruplets.getTable());
+                     oc.display();
+                }
                 System.out.println("///////////////////---- COMPILING COMPLETED ----///////////////////");
                 //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
-        /*} catch (Exception e){
-                if (e.getMessage() != null){
-                        System.out.println("Exception caught: "+e.getMessage());
-                } else {
-                        e.printStackTrace();
-                }
-        }*/
+        } catch (Exception e){
+           /* if (e.getMessage() != null){
+                    System.out.println("Exception caught at line "+e.getStackTrace()[0].getLineNumber()+": "+e.getMessage());
+            } else {*/
+                    e.printStackTrace();
+           // }
+        }
     }
 }
