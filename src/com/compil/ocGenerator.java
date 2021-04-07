@@ -96,10 +96,10 @@ public class ocGenerator {
                     //System.out.println( table.getQuad(i).getOp(0)+"   "+ table.getQuad(i).getOp(1)+"  "+ table.getQuad(i).getOp(2)+"  "+ table.getQuad(i).getOp(3));
                     //System.out.println( etiquettes.length);
 
-                    aInstructions.add(AssemblerInstruction.needsEtiq("MOV", " AX,",table.getQuad(i).getOp(2),table.getQuad(i).getPointedAt(), i));
+                    aInstructions.add(AssemblerInstruction.needsEtiq("MOV", " AX,",table.getQuad(i).getOp(1),table.getQuad(i).getPointedAt(), i));
 
                     //aInstructions.add(new AssemblerInstruction("MOV", " AX,", table.getQuad(i).getOp(2)));
-                    aInstructions.add(new AssemblerInstruction("CMP", " AX,", table.getQuad(i).getOp(1))); //TODO inverser le 3 et le 1 dans les quads de branchement
+                    aInstructions.add(new AssemblerInstruction("CMP", " AX,", table.getQuad(i).getOp(2))); //TODO inverser le 3 et le 1 dans les quads de branchement
                     x=  Integer.parseInt(table.getQuad(i).getOp(3));
                     aInstructions.add(new AssemblerInstruction(quadToCo.get(o), "etiq"+x));
 
