@@ -23,8 +23,6 @@ public class errorListener extends BaseErrorListener {
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
     {
-
-
         List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
         Collections.reverse(stack);
         errors.add("Syntaxic error at line "+line+":"+charPositionInLine+" at "+ offendingSymbol+": "+msg);

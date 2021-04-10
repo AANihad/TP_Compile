@@ -276,24 +276,23 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     }
 
     @Override
-    public void exitEcrire(TinyLanguageSIIParser.EcrireContext ctx) { // TODO : A revérifier
+    public void exitEcrire(TinyLanguageSIIParser.EcrireContext ctx) {
         //verifier si les variables sont déclarées
         if (ctx.STRING()==null && ctx.ids().getChildCount()>1){
             for (int i=0; i<ctx.ids().getChildCount(); i++)
-                if (!ctx.ids().ID(i).getText().equals(",") && !table.contains(ctx.ids().ID(i).getText()))
-                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ids().children.get(i).getText() );
+                if (ctx.ids().ID(i) != null && !table.contains(ctx.ids().ID(i).getText()))
+                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ids().ID(i).getText() );
         } else if (ctx.STRING()==null) {
-            if (!table.contains(ctx.ids().ID(0).getText()))
-                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.getChild(2).getText());
+            if (ctx.ids().ID(0) != null && !table.contains(ctx.ids().ID(0).getText()))
+                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.ids().ID(0).getText());
         }
     }
 
     @Override
-    public void exitLire(TinyLanguageSIIParser.LireContext ctx) {// TODO : A revérifier
-        //verifier si les variables sont déclarées
+    public void exitLire(TinyLanguageSIIParser.LireContext ctx) {
         for (int i=0; i<ctx.ids().getChildCount(); i++)
-            if (!ctx.ids().children.get(i).getText().equals(",") && !table.contains(ctx.ids().children.get(i).getText()))
-                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.ids().children.get(i).getText());
+            if (ctx.ids().ID(i) != null && !table.contains(ctx.ids().ID(i).getText()))
+                errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.ids().ID(i).getText());
     }
 
     // Méthodes  pour gérer les types des expressions
@@ -368,6 +367,7 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
 
     private static String calculer(elementValue gauche, TinyLanguageSIIParser.OpMDContext MD, TinyLanguageSIIParser.OpPMContext PM, elementValue droite){
 
+        //System.out.println(gauche +" . "+droite);
         float gf;
         float df;
         float f=0;

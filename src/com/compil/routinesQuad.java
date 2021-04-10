@@ -122,22 +122,24 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
 
     @Override
     public void exitEcrire(TinyLanguageSIIParser.EcrireContext ctx) {
-        if (ctx.getChild(2).getChildCount()>1){
-            for (int i=0; i<ctx.getChild(2).getChildCount(); i++)
-                if (!ctx.ids().children.get(i).getText().equals(","))
-                    table.add("WRITE", ctx.getChild(2).getChild(i).getText(), " ", " ");
-
+        if (ctx.STRING()==null && ctx.ids().getChildCount()>1){
+            for (int i=0; i<ctx.ids().getChildCount(); i++)
+                if (ctx.ids().ID(i) != null)
+                    table.add("WRITE", ctx.ids().ID(i).getText(), " ", " ");
+        }
+        else if (ctx.STRING()==null) {
+            if (ctx.ids().ID(0) != null)
+                table.add("WRITE", ctx.ids().ID(0).getText(), " ", " ");
         }
         else
-            table.add("WRITE", ctx.getChild(2).getText(), " ", " ");
+            table.add("WRITE",ctx.STRING().getText(), " ", " ");
     }
 
     @Override
     public void exitLire(TinyLanguageSIIParser.LireContext ctx) {
         for (int i=0; i<ctx.ids().getChildCount(); i++)
-            if (!ctx.ids().children.get(i).getText().equals(","))
-                table.add("READ", ctx.ids().children.get(i).getText(), " ", " ");
-
+            if (ctx.ids().ID(i) != null)
+                table.add("READ", ctx.ids().ID(i).getText(), " ", " ");
     }
 
     public tableQuadruplets getTable() {

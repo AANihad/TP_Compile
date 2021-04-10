@@ -47,7 +47,6 @@ WS : [ \n\t\r] -> skip;
 
 //============------------ Analyseur syntaxique ------------============
 
-//prg : ID NOM_PROGRAMME '('')''{' declarations START instructions '}';
 programme : COMPIL NOM_PROGRAMME'{' declarations START instructions '}';
 
 declarations : declarations type ids ';'

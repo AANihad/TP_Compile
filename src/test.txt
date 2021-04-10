@@ -1,14 +1,21 @@
+
 compil Nom_du_programme ()
 {
-	intCompil b, c;
-	floatCompil a ;
-	stringCompil d;
+    intCompil a, t1;
+    floatCompil b, t2;
+    stringCompil c;
 start
-    d = "Chaine simple";
-    c = 8/3 + 1,9;
-	b = 5/2;
-	b = b* 2;
-	a = 5/2;
-	a = a*2;
-	c = d;
+    t1 =8;
+    a = 10 * 3;
+    if (t1 > 0) then {
+        b = a + 1 ;
+    }else{
+        do {
+            t2 = a + 1 ;
+            t1 = t1+1 ;
+            b = t1 / t2 ;
+        } while (t1 != 10)
+    }
+    printCompil ("test du projet") ;
+    printCompil (c) ;
 }
