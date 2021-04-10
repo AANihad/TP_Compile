@@ -1,10 +1,28 @@
 compil Nom_du_programme ()
 {
-    intCompil a;
+	intCompil term1, term2, term3 ;
+	floatCompil div ;
+	stringCompil chaine1 ;
 start
-    a = 5/2;
-    a = a*2;
-    if (a<  99) then {
-        a = a+1;
-    }
+	div = 0 ;
+	term1 = 5;
+	term3 = 88;
+	term2 = 26 + 1 * 5 ;
+
+	if (term1 > 0) then {
+		term2 = term2 + 1 ;
+		term1 = term1+1 ;
+	}else{
+		term2 = term2 + 2 ;
+		term3 = term3 / term2 ;
+	}
+	do {
+		term2 = term3 + 1 ;
+		term1 = term1+1 ;
+		term3 = term3 / term2 ;
+	}while(term1 != 10)
+
+	scanCompil (term1, term2) ;
+	printCompil ("Le résultat est") ;
+	printCompil (div) ;
 }

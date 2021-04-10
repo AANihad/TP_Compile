@@ -108,6 +108,6 @@ oplog : SUP
     | DIFF
     ;
 
-ecrire : PRINTFCOMPIL '(' (ID | STRING | ids) ')';
-//ecrire : PRINTFCOMPIL '(' (STRING | ids) ')';
+//ecrire : PRINTFCOMPIL '(' (ID | STRING | ids) ')';
+ecrire : PRINTFCOMPIL '(' (STRING | ids) ')';
 lire : SCANCOMPIL '(' ids ')';

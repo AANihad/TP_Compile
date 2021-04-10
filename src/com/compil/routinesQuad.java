@@ -66,7 +66,12 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
     @Override
     public void exitAffectation(TinyLanguageSIIParser.AffectationContext ctx) {
         // si on est là c'est qu'on est forcément passés par une expression (fin exp) et donc on a empilé un id
-        String tmp = stack.removeLast();
+        String tmp ="";
+
+        if (ctx.STRING()!=null)
+            tmp = ctx.STRING().toString(); //Do We really need it?
+        else
+            tmp = stack.removeLast();
         table.add("=", " ", tmp,ctx.ID().getText());
     }
 

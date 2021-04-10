@@ -46,8 +46,15 @@ public class TableSymbole {
             String dec = (declared == 1)? "\tDECLARED":"\tUNDECLARED";
             String val = String.valueOf(value);
             String n = (name.length()>5)? "\t"+name+"\t\t\t": "\t\t"+name+"\t\t";
+            String t;
+            if (type == 1)
+                t="\t   intCompil\t\t";
+            else if (type == 2)
+                t = "\tfloatCompil\t\t";
+            else
+                t= "\t  stringCompil\t";
             return "| " + n + " |"
-                    + ((type==1)?"\t  intcompil\t\t":"\tfloatcompil\t\t")
+                    + t
                     + " |\t" + dec + " \t\t|\t"+val;
         }
 

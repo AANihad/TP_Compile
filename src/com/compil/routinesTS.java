@@ -20,7 +20,6 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     private static final int STRING = 3;
 
     private static final int DECLARED = 1;
-    private static final int UNDECLARED = 0;
 
     private static final String ERR_NO_DEC =" variable non declared : ";
     private static final String ERR_DIV_Z =" numeric overflow : ";
@@ -47,9 +46,6 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
     @Override
     public void enterProgramme(TinyLanguageSIIParser.ProgrammeContext ctx){
         System.out.println("Program rule entered");
-        types = new HashMap<ParserRuleContext, Integer>();
-        valeurs = new HashMap<ParserRuleContext, String>();
-        typeVal = new HashMap<ParserRuleContext, elementValue>();
     }
 
     @Override
@@ -81,6 +77,8 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
             else
                 type = STRING;
 
+
+
             TinyLanguageSIIParser.IdsContext idVariables = ctx.ids();
             for (int i=0; i<idVariables.ID().size(); i++)
             {
@@ -88,8 +86,10 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                 if(table.contains(nomVariable)) { // Ajouter une erreur à la liste d'erreurs
                     errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_DOUBLE_DEC + nomVariable );
                 }
-                else //ajouter l'element à la table
+                else { //ajouter l'element à la table
                     table.add(new TableSymbole.row(nomVariable, DECLARED, type)); // Les ids sont automatquement insérés en tant que non instanciés
+                    System.out.println(type+"ylyl");
+                }
 //            if (idVariables.ID() == null)
 //                return;
             }
@@ -163,9 +163,28 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                     if (dec1 && dec2 && compatibles(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1)))) {
                         System.out.println(getCtxType(ctx.exp(0))+"   .   "+ getCtxType(ctx.exp(1)));
                         int t = typeResultat(getCtxType(ctx.exp(0)), getCtxType(ctx.exp(1)));
-                        resultat = calculer(typeVal.get(ctx.exp(0)), ctx.opMD(), ctx.opPM(), typeVal.get(ctx.exp(1)));
+                        //System.out.println("----------------------"+typeVal.get(ctx.exp(0))+ " -- " +typeVal.get(ctx.exp(1)));
 
-//                      resultat = calculer(valeurs.get(ctx.exp(0)), ctx.opMD(), ctx.opPM(), valeurs.get(ctx.exp(1)), t);
+
+                        if (ctx.exp(0)!=null && ctx.exp(1)!=null){
+
+                            elementValue g = typeVal.get(ctx.exp(0)), d=typeVal.get(ctx.exp(1));
+                            if (g.getVal()!= null && d.getVal()!= null)
+                                resultat = calculer(g, ctx.opMD(), ctx.opPM(), d);
+                            else if (ctx.exp(0)!=null)
+                                resultat = g.getVal();
+                            else if (ctx.exp(1)!=null)
+                                resultat = d.getVal();
+
+                        }
+                        else if (ctx.exp(0)!=null)
+                            resultat = ctx.exp(0).getText();
+                        else if (ctx.exp(1)!=null)
+                            resultat = ctx.exp(1).getText();
+
+//                        resultat = calculer(typeVal.get(ctx.exp(0)), ctx.opMD(), ctx.opPM(), typeVal.get(ctx.exp(1)));
+
+
                         addCtxType(ctx, t);
                         addCtxVal(ctx,resultat);
                         if(table.getRowByName(ctx.exp(0).getText())!=null)
@@ -213,8 +232,9 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                     addCtxType(ctx, table.getRowByName(ctx.ID().getText()).getType());
                     addCtxVal(ctx,table.getRowByName(ctx.ID().getText()).getValue());
                 }
-                else if (ctx.ID()!=null && !table.contains(ctx.ID().getText())) //id non déclaré
-                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+  ctx.getText());
+                else if (ctx.ID()!=null && !table.contains(ctx.ID().getText())) { //id non déclaré
+                    errors.add("Semantic error at line " + ctx.getStart().getLine() + ":" + ctx.getStart().getCharPositionInLine() + ERR_NO_DEC + ctx.getText());
+                }
             }
         }
         catch (Exception e){
@@ -245,35 +265,43 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
 
 
 
-            System.out.println(ctx.exp().getText()+"   ...");
+            //System.out.println(ctx.exp().getText()+"   ...");
             if(!compatibles(type1, type2))
                 errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_INCOMPATIBILITY+ctx.ID().getText() );
             else{
-                int type = typeResultat(type1, type2);
-                //Récupérer la valeur de l'expression
+                if(type1 != 3 && type2!= 3){
+                    int type = typeResultat(type1, type2);
+                    //Récupérer la valeur de l'expression
 
-                table.getRowByName(ctx.ID().getText()).setValue(getCtxVal(ctx.exp()));
+                    table.getRowByName(ctx.ID().getText()).setValue(getCtxVal(ctx.exp()));
 
-                String value = getCtxVal(ctx.exp());
-                float f = Float.parseFloat(value.replace(",", "."));
-                //float f = 0;
-                if (value!= null)
-                    System.out.println(value+"***");
-                else
-                    System.out.println("***");
+                    String value = getCtxVal(ctx.exp());
+                    if (value != null){
+                        float f = Float.parseFloat(value.replace(",", "."));
+                        //float f = 0;
+                        if (value!= null)
+                            System.out.println(value+"***");
+                        else
+                            System.out.println("***");
 
-                if (type==INT){
-                    int i = (int)f;
-                    System.out.println(i+" ////////");
-                    addCtxVal(ctx, String.valueOf(i));
-                    table.getRowByName(ctx.ID().getText()).setValue(String.valueOf(i));
+                        if (type==INT){
+                            int i = (int)f;
+                            System.out.println(i+" ////////");
+                            addCtxVal(ctx, String.valueOf(i));
+                            table.getRowByName(ctx.ID().getText()).setValue(String.valueOf(i));
+                        }
+                        else{
+                            addCtxVal(ctx, String.valueOf(f));
+                            table.getRowByName(ctx.ID().getText()).setValue(String.valueOf(f));
+                        }
+                    }
+                    addCtxType(ctx, type);
+                    addCtxType(ctx.exp(), type);
                 }
-                else{
-                    addCtxVal(ctx, String.valueOf(f));
-                    table.getRowByName(ctx.ID().getText()).setValue(String.valueOf(f));
+                else {
+                    addCtxType(ctx, 3);
+                    table.getRowByName(ctx.ID().getText()).setValue(ctx.STRING().getText());
                 }
-                addCtxType(ctx, type);
-                addCtxType(ctx.exp(), type);
 
 //                System.out.println(getCtxType(ctx)+"      ***");
 //            valeurs.put(ctx,getCtxVal(ctx.exp()));
@@ -281,19 +309,19 @@ public class routinesTS extends TinyLanguageSIIBaseListener {
                 table.getRowByName(ctx.ID().getText()).setInit(true);
             }
         }
-        else
+        else if (ctx.STRING()==null)
             errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ID().getText() );
     }
 
     @Override
     public void exitEcrire(TinyLanguageSIIParser.EcrireContext ctx) { // TODO : A revérifier
         //verifier si les variables sont déclarées
-        if (ctx.getChild(2).getChildCount()>1){
-            for (int i=0; i<ctx.getChild(2).getChildCount(); i++)
-                if (!ctx.ids().children.get(i).getText().equals(",") && !table.contains(ctx.ids().children.get(i).getText()))
-                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ids().children.get(i).getText() ); }
-        else {
-            if (!table.contains(ctx.getChild(2).getText()))
+        if (ctx.STRING()==null && ctx.ids().getChildCount()>1){
+            for (int i=0; i<ctx.ids().getChildCount(); i++)
+                if (!ctx.ids().ID(i).getText().equals(",") && !table.contains(ctx.ids().ID(i).getText()))
+                    errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ ERR_NO_DEC+ctx.ids().children.get(i).getText() );
+        } else if (ctx.STRING()==null) {
+            if (!table.contains(ctx.ids().ID(0).getText()))
                 errors.add("Semantic error at line "+ctx.getStart().getLine()+":"+ctx.getStart().getCharPositionInLine()+ERR_NO_DEC + ctx.getChild(2).getText());
         }
     }

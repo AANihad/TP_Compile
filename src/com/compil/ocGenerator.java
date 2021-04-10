@@ -123,7 +123,7 @@ public class ocGenerator {
                 case "BR" :
                 {
                     aInstructions.add(AssemblerInstruction.needsEtiq(quadToCo.get(o), table.getQuad(i).getOp(1),"",table.getQuad(i).getPointedAt(), i));
-                    x=  Integer.parseInt((table.getQuad(i).getOp(1).equals(""))?"0":table.getQuad(i).getOp(1));
+                    x=  Integer.parseInt((table.getQuad(i).getOp(3).equals(""))?"0":table.getQuad(i).getOp(3));
                     aInstructions.add(new AssemblerInstruction(quadToCo.get(o), "etiq"+x));
 
                     etiquettes[x]=aInstructions.size()-1;
