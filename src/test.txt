@@ -1,12 +1,10 @@
 compil Nom_du_programme ()
 {
-	intCompil p, k, a,b ;
+    intCompil a;
 start
-	if (a > b) then {
-    	p=p+1;
-    }else{
-        do{
-            k = k+1;
-        }while(b<a)
+    a = 5/2;
+    a = a*2;
+    if (a<  99) then {
+        a = a+1;
     }
 }

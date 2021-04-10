@@ -34,7 +34,7 @@ AFF : '=';
 
 
 //Expressions régulières
-NOM_PROGRAMME : [A-Z]([a-zA-Z0-9]|'_')*;
+NOM_PROGRAMME : [A-Z]([a-zA-Z0-9]|'_')* .*? '('.*?')';
 ID : [a-zA-Z][a-zA-Z0-9]*;
 INTEGER : [0-9]+ ;
 FLOAT :  [0-9]+','[0-9]+;
@@ -48,7 +48,7 @@ WS : [ \n\t\r] -> skip;
 //============------------ Analyseur syntaxique ------------============
 
 //prg : ID NOM_PROGRAMME '('')''{' declarations START instructions '}';
-programme : COMPIL NOM_PROGRAMME '('')''{' declarations START instructions '}';
+programme : COMPIL NOM_PROGRAMME'{' declarations START instructions '}';
 
 declarations : declarations type ids ';'
             | ;
@@ -83,15 +83,17 @@ instElse : ELSE; // pour pouvoir génerer les quadruplets
 cdtIF : '('exp oplog exp')';
 cdtDO : '('exp oplog exp')';
 
-exp :
-    '-' exp
-    | '(' exp ')'
+exp : MOINS exp
+    | parG exp parD
     | exp opMD exp
     | exp opPM exp
     | INTEGER
     | FLOAT
     | ID
     ;
+
+parG: '(';
+parD: ')';
 
 opMD : MUL
     | DIV;

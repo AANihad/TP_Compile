@@ -54,7 +54,6 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
             String s2 = stack.removeLast();
             String T = "T"+(++compteurT);
             stack.add(T);
-            //System.out.println("..."+op+"  .  "+s2+"  .  "+s1+"  .  "+T);
             table.add(op, s2, s1,T);
         }
         else{
@@ -78,14 +77,12 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
 */
     @Override
     public void exitCondition(TinyLanguageSIIParser.ConditionContext ctx) {
-        table.getQuad(sauvQCIf).setOp(1,table.getSize()+"");
-
+        table.getQuad(sauvQCIf).setOp(3,table.getSize()+"");
     }
 
     @Override
     public void exitInstElse(TinyLanguageSIIParser.InstElseContext ctx) {
         table.getQuad(sauvQCIf).setOp(3, table.getSize()+1+"");//table.getSize()
-
         sauvQCIf = table.add(new tableQuadruplets.quadruple("BR", " ", " ", " "));
     }
 
@@ -97,8 +94,7 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
 //      table.add(branchements.get(ctx.oplog().getText()), gauche,droite, "");
 
         sauvQCIf = table.add(q);
-        table.getQuad(table.getSize()-1).setPointedAt(true);
-
+//        table.getQuad(table.getSize()-1).setPointedAt(true);
     }
 
     @Override
@@ -129,8 +125,6 @@ public class routinesQuad extends TinyLanguageSIIBaseListener {
         }
         else
             table.add("WRITE", ctx.getChild(2).getText(), " ", " ");
-
-
     }
 
     @Override

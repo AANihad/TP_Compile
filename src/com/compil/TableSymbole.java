@@ -15,18 +15,20 @@ public class TableSymbole {
 
     static public class row {
 
-        String name;
-        int declared; // 0:undeclared 1:declared
-        int type; // 1:intcompil 2:floatcompil 3:stringcompil
-        boolean used;
+        private String name;
+        private int declared; // 0:undeclared 1:declared
+        private int type; // 1:intcompil 2:floatcompil 3:stringcompil
+        private boolean init = false;
+        private boolean used;
 
-        //Pour représenter la valeur donnée à la variable TODO : à implémenter
-        elementValue init; // TODO on pourra remplacer object par une structure valeur
+        //Pour représenter la valeur donnée à la variable
+        private String value;
 
         public row(String name, int declared, int type) {
             this.name = name;
             this.declared = declared;
             this.type = type;
+            init = false;
         }
 
         //la variable used n'est pas obligatoire
@@ -42,11 +44,19 @@ public class TableSymbole {
         public String toString()
         {
             String dec = (declared == 1)? "\tDECLARED":"\tUNDECLARED";
-            String val = (init!=null)? init.toString():"";
+            String val = String.valueOf(value);
             String n = (name.length()>5)? "\t"+name+"\t\t\t": "\t\t"+name+"\t\t";
             return "| " + n + " |"
-                    + ((type==1)?"\t  intcompil\t":"\t\tfloatcompil\t")
+                    + ((type==1)?"\t  intcompil\t\t":"\tfloatcompil\t\t")
                     + " |\t" + dec + " \t\t|\t"+val;
+        }
+
+        public boolean isInit() {
+            return init;
+        }
+
+        public void setInit(boolean init) {
+            this.init = init;
         }
 
         public String getName() {
@@ -81,12 +91,12 @@ public class TableSymbole {
             this.used = used;
         }
 
-        public elementValue getInit() {
-            return init;
+        public String getValue() {
+            return value;
         }
 
-        public void setInit(elementValue init) {
-            this.init = init;
+        public void setValue(String value) {
+            this.value = value;
         }
     }
 
@@ -131,12 +141,6 @@ public class TableSymbole {
         rows.add(R);
     }
 
-    //permet de donner une valeur à un objet TODO On pourra remplacer l'objet par une structure personnalisée int, douuble& String
-    public void putValue(String name, elementValue o){
-        for (TableSymbole.row row : rows)
-            if (row.name.compareTo(name) == 0)
-                row.setInit(o);
-    }
     // Mettre à jour la valeur de declared
     public void declare (String name, int declared){
         for (TableSymbole.row row : rows)

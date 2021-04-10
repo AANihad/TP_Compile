@@ -24,6 +24,8 @@ public class ocGenerator {
         quadToCo.put("BE", "JE");
         quadToCo.put("BNE", "JNE");
 
+        quadToCo.put("BR", "JMP");
+        quadToCo.put("END", "END");
     }
 
     public static class AssemblerInstruction {
@@ -56,6 +58,8 @@ public class ocGenerator {
             AssemblerInstruction i = (c.equals(""))? new AssemblerInstruction(a,b):new AssemblerInstruction(a,b,c);
             if (etiq)
                 i.setEtiq("etiq" +j +"\t");
+            else
+                i.setEtiq("\t\t");
             return i;
         }
 
@@ -78,34 +82,65 @@ public class ocGenerator {
 
             String o = table.getQuad(i).getOp(0);
             switch (o) {
-                case "+", "-", "*", "/" -> {
+                case "+":
+                case "-":
+                case "*":
+                case "/" :
+                {
                     aInstructions.add(AssemblerInstruction.needsEtiq("MOV", " AX,", table.getQuad(i).getOp(1), table.getQuad(i).getPointedAt(), i));
                     aInstructions.add(new AssemblerInstruction(quadToCo.get(o), " AX,", table.getQuad(i).getOp(2)));
                     aInstructions.add(new AssemblerInstruction("MOV", table.getQuad(i).getOp(3), ", AX"));
+                    break;
                 }
-                case "=" -> {
+                case "=" : {
                     aInstructions.add(AssemblerInstruction.needsEtiq("MOV", " AX,", table.getQuad(i).getOp(2), table.getQuad(i).getPointedAt(), i));
                     //aInstructions.add(new AssemblerInstruction("MOV", " AX, ", table.getQuad(i).getOp(2)));
                     aInstructions.add(new AssemblerInstruction("MOV", table.getQuad(i).getOp(3), ", AX"));
+                    break;
                 }
-                case "READ", "WRITE" -> {
+                case "READ":
+                case "WRITE" :
+                {
                     aInstructions.add(AssemblerInstruction.needsEtiq(quadToCo.get(o), table.getQuad(i).getOp(1),"",table.getQuad(i).getPointedAt(), i));
-                    //aInstructions.add(new AssemblerInstruction(quadToCo.get(o), table.getQuad(i).getOp(1),""));
+                    break;
                 }
-                case "BG", "BL", "BGE", "BNE", "BLE", "BE" -> {
-                    //System.out.println( table.getQuad(i).getOp(0)+"   "+ table.getQuad(i).getOp(1)+"  "+ table.getQuad(i).getOp(2)+"  "+ table.getQuad(i).getOp(3));
-                    //System.out.println( etiquettes.length);
-
+                case "BG":
+                case "BL":
+                case "BGE":
+                case "BNE":
+                case "BLE":
+                case "BE" :
+                {
                     aInstructions.add(AssemblerInstruction.needsEtiq("MOV", " AX,",table.getQuad(i).getOp(1),table.getQuad(i).getPointedAt(), i));
-
-                    //aInstructions.add(new AssemblerInstruction("MOV", " AX,", table.getQuad(i).getOp(2)));
                     aInstructions.add(new AssemblerInstruction("CMP", " AX,", table.getQuad(i).getOp(2))); //TODO inverser le 3 et le 1 dans les quads de branchement
-                    x=  Integer.parseInt(table.getQuad(i).getOp(3));
+                    x=  Integer.parseInt((table.getQuad(i).getOp(3).equals(""))?"0":table.getQuad(i).getOp(3));
                     aInstructions.add(new AssemblerInstruction(quadToCo.get(o), "etiq"+x));
 
                     etiquettes[x]=aInstructions.size()-1;
                     table.getQuad(x).setPointedAt(true);
+                    break;
                 }
+                case "BR" :
+                {
+                    aInstructions.add(AssemblerInstruction.needsEtiq(quadToCo.get(o), table.getQuad(i).getOp(1),"",table.getQuad(i).getPointedAt(), i));
+                    x=  Integer.parseInt((table.getQuad(i).getOp(1).equals(""))?"0":table.getQuad(i).getOp(1));
+                    aInstructions.add(new AssemblerInstruction(quadToCo.get(o), "etiq"+x));
+
+                    etiquettes[x]=aInstructions.size()-1;
+                    table.getQuad(x).setPointedAt(true);
+                    break;
+                }
+                case "END" :
+                {
+                    aInstructions.add(AssemblerInstruction.needsEtiq(quadToCo.get(o), "","",table.getQuad(i).getPointedAt(), i));
+                    //aInstructions.add(new AssemblerInstruction("END", table.getQuad(i).getOp(1),""));
+                    break;
+                }
+                default :{
+                    System.out.println("Invalid : can't find "+o);
+                }
+
+
             }
         }
         return this.aInstructions;
@@ -114,10 +149,11 @@ public class ocGenerator {
     public void display() {
         System.out.println("\t\tOBJECT CODE");
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        System.out.println("start:\t");
         for (int i = 0; i < aInstructions.size(); i++)
             System.out.println(aInstructions.get(i).toString());
+        System.out.println("code ends\t");
+        System.out.println("end start\t");
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%");
     }
-
-
 }

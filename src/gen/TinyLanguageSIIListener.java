@@ -158,6 +158,26 @@ public interface TinyLanguageSIIListener extends ParseTreeListener {
 	 */
 	void exitExp(TinyLanguageSIIParser.ExpContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#parG}.
+	 * @param ctx the parse tree
+	 */
+	void enterParG(TinyLanguageSIIParser.ParGContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#parG}.
+	 * @param ctx the parse tree
+	 */
+	void exitParG(TinyLanguageSIIParser.ParGContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#parD}.
+	 * @param ctx the parse tree
+	 */
+	void enterParD(TinyLanguageSIIParser.ParDContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TinyLanguageSIIParser#parD}.
+	 * @param ctx the parse tree
+	 */
+	void exitParD(TinyLanguageSIIParser.ParDContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TinyLanguageSIIParser#opMD}.
 	 * @param ctx the parse tree
 	 */

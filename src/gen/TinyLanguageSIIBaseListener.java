@@ -196,6 +196,30 @@ public class TinyLanguageSIIBaseListener implements TinyLanguageSIIListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterParG(TinyLanguageSIIParser.ParGContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParG(TinyLanguageSIIParser.ParGContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParD(TinyLanguageSIIParser.ParDContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParD(TinyLanguageSIIParser.ParDContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterOpMD(TinyLanguageSIIParser.OpMDContext ctx) { }
 	/**
 	 * {@inheritDoc}
