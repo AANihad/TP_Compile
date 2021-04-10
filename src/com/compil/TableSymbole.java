@@ -48,11 +48,11 @@ public class TableSymbole {
             String n = (name.length()>5)? "\t"+name+"\t\t\t": "\t\t"+name+"\t\t";
             String t;
             if (type == 1)
-                t="\t   intCompil\t\t";
+                t="\t\tintCompil\t\t";
             else if (type == 2)
-                t = "\tfloatCompil\t\t";
+                t = "\t\tfloatCompil\t\t";
             else
-                t= "\t  stringCompil\t";
+                t= "\t\tstringCompil  \t";
             return "| " + n + " |"
                     + t
                     + " |\t" + dec + " \t\t|\t"+val;
@@ -116,7 +116,7 @@ public class TableSymbole {
         for (row r: rows) {
             System.out.println(r.toString());
         }
-        System.out.println("\n========================================================");
+        System.out.println("======================================================================================");
     }
 
     public ArrayList<row> getRow() {

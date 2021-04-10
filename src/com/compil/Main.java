@@ -59,11 +59,11 @@ public class Main {
                 System.out.println("///////////////////---- COMPILING COMPLETED ----///////////////////");
                 //System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         } catch (Exception e){
-           /* if (e.getMessage() != null){
+            if (e.getMessage() != null){
                     System.out.println("Exception caught at line "+e.getStackTrace()[0].getLineNumber()+": "+e.getMessage());
-            } else {*/
+            } else {
                     e.printStackTrace();
-           // }
+            }
         }
     }
 }
